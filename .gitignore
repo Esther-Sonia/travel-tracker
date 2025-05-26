@@ -1,0 +1,10 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.db
+
+# Environment files
+.env
+
+# VS Code settings (if you're using it)
+.vscode/
