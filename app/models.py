@@ -11,6 +11,8 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow,nullable=False )
 
+    trips = relationship("Trip", back_populates="user")
+
 class Destination(Base):
     __tablename__ = 'destinations'
 
