@@ -1,21 +1,27 @@
-# 🌍 Travel Tracker CLI App
+🌍 Travel Tracker CLI App
 
-Welcome to the **Travel Tracker** – a Command Line Interface (CLI) application that helps you track and manage your travel experiences! This project allows users to log their trips, see upcoming and completed journeys, analyze travel statistics, and manage user profiles — all from the terminal.
+Welcome to the Travel Tracker – your personal travel journal in the command line! This CLI application helps globetrotters log, organize, and analyze their travel experiences with ease.
+
+---
+
+✨ Key Features
+
+✈️ Add a new trip with destination, country, continent, and travel dates
+
+🗓️ View upcoming and completed trips
+
+🧾 Add optional notes to your trips
+
+📊 View travel statistics (countries and continents visited)
+
+👤 Create and log in as a user with name and email
+
+🗑️ Delete trips
+
+📋 View your profile info (name, email, account creation date)
 
 ---
 
-## 🚀 Features
-
-- **User Login System:** Log in using your name and email. New users are created automatically.
-- **Add Trips:** Add a new trip by specifying the destination, country, continent, and travel dates.
-- **View Trips:**
-  - Upcoming trips (future travel plans)
-  - Completed trips (past travels)
-- **Delete Trips:** Remove any trip by its unique ID.
-- **Travel Stats:** View the number of countries and continents you've visited.
-- **Profile Info:** Check your registered name, email, and account creation date.
-
----
 
 ## 🛠️ Technologies Used
 
