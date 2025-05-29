@@ -122,7 +122,7 @@ def view_profile_info(user_id):
     print("\n Your Travel Profile:")
     print(f"- Name: {user.name}")
     print(f"- Email: {user.email}")
-    print(f"- Account Created At: {user.created_at.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"- Account Created At: {user.created_at.strftime('%d-%m-%Y %H:%M:%S')}")
 
 def menu(user_id):
     while True:
