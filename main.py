@@ -138,7 +138,7 @@ def update_user_email(user_id):
 
         user.email = new_email
         session.commit()
-        print("✅ Email updated successfully.")
+        print("Email updated successfully.")
     else:
         print("User not found.")
 
