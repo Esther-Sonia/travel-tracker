@@ -142,6 +142,29 @@ def update_user_email(user_id):
     else:
         print("User not found.")
 
+def delete_user_account(user_id):
+    user = session.query(User).filter_by(id=user_id).first()
+
+    if not user:
+        print("User not found.")
+        return
+
+    confirm = input("Are you sure you want to delete your account? This will remove all your trips too. (yes/no): ").strip().lower()
+    if confirm == "yes":
+        
+        session.query(Trip).filter_by(user_id=user_id).delete()
+        session.delete(user)
+        try:
+            session.commit()
+            print("Your account and all trips have been deleted. Goodbye!")
+            exit()  
+        except Exception as e:
+            session.rollback()
+            print(f"Error deleting account: {e}")
+    else:
+        print("Account deletion cancelled.")
+
+
 
 def menu(user_id):
     while True:
@@ -153,8 +176,9 @@ def menu(user_id):
 4. Delete a trip
 5. Show travel stats
 6. View profile info
-7. Update profile info
-8. Exit                         
+7. Update profile inf0
+8. Delete account
+9. Exit                         
             
 
 """)
@@ -175,6 +199,8 @@ def menu(user_id):
         elif choice == '7':
             update_user_email(user_id)
         elif choice == '8':
+            delete_user_account(user_id)
+        elif choice == '9':
             break 
         else:
          print("Invalid choice. Try again.")
