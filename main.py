@@ -87,6 +87,72 @@ def view_completed_trips(user_id):
         print("No completed trips found.")
 
 
+def update_trip(user_id):
+    trip_id = input("Enter the Trip ID you want to update: ").strip()
+    trip = session.query(Trip).filter_by(id=trip_id, user_id=user_id).first()  #here fetch the trip you want to update
+    if not trip:
+        print("Trip not found.")
+        return
+
+    print(f"\nEditing Trip to {trip.destination.name}, {trip.destination.country}")
+    
+    # Prompt for new details
+    new_name = input(f"New destination name (or press Enter to keep '{trip.destination.name}'): ").strip()
+    new_country = input(f"New country (or press Enter to keep '{trip.destination.country}'): ").strip()
+    new_continent = input(f"New continent (or press Enter to keep '{trip.destination.continent}'): ").strip()
+     
+     #update start and end dates if provided
+    start_date_input = input(f"New start date (DD-MM-YYYY) or press Enter to keep '{trip.start_date.strftime('%d-%m-%Y')}': ").strip()
+    if start_date_input:
+        try:
+            trip.start_date = datetime.strptime(start_date_input, "%d-%m-%Y").date()
+        except ValueError:
+            print("Invalid date format. Keeping original start date.")
+
+    end_date_input = input(f"New end date (DD-MM-YYYY) or press Enter to keep '{trip.end_date.strftime('%d-%m-%Y')}': ").strip()
+    if end_date_input:
+        try:
+            new_end_date = datetime.strptime(end_date_input, "%d-%m-%Y").date()
+            if new_end_date < trip.start_date:
+                print("End date cannot be before start date. Keeping original end date.")
+            else:
+                trip.end_date = new_end_date
+        except ValueError:
+            print("Invalid date format. Keeping original end date.")
+
+    # Update notes if new ones are provided
+    new_notes = input("New notes (or press Enter to keep current notes): ").strip()
+    if new_notes:
+        trip.notes = new_notes
+
+
+    new_destination_name = new_name or trip.destination.name
+    new_country = new_country or trip.destination.country
+    new_continent = new_continent or trip.destination.continent
+
+    # Check if the destination exists already
+    destination = session.query(Destination).filter_by(
+        name=new_destination_name,
+        country=new_country,
+        continent=new_continent
+    ).first()
+
+    if not destination:
+        destination = Destination(name=new_destination_name, country=new_country, continent=new_continent)
+        session.add(destination)
+        session.commit()
+
+    trip.destination_id = destination.id
+
+    try:
+        session.commit()
+        print("Trip updated successfully!")
+    except Exception as e:
+        session.rollback()
+        print(f"Error updating trip: {e}")
+
+
+
 def delete_trip(user_id):
     trip_id = input("Enter the Trip ID you want to delete (e.g. 11): ").strip()
     trip = session.query(Trip).filter_by(id=trip_id, user_id=user_id).first()
@@ -173,12 +239,13 @@ def menu(user_id):
 1. Add a new trip
 2. View upcoming trips
 3. View completed trips
-4. Delete a trip
-5. Show travel stats
-6. View profile info
-7. Update profile inf0
-8. Delete account
-9. Exit                         
+4. Update a trip
+5. Delete a trip
+6. Show travel stats
+7. View profile info
+8. Update profile inf0
+9. Delete account
+10. Exit                         
             
 
 """)
@@ -191,16 +258,18 @@ def menu(user_id):
         elif choice == '3':
             view_completed_trips(user_id)
         elif choice == '4':
-            delete_trip(user_id)
+            update_trip(user_id)    
         elif choice == '5':
-            show_travel_stats(user_id)
+            delete_trip(user_id)
         elif choice == '6':
-            view_profile_info(user_id)
+            show_travel_stats(user_id)
         elif choice == '7':
-            update_user_email(user_id)
+            view_profile_info(user_id)
         elif choice == '8':
-            delete_user_account(user_id)
+            update_user_email(user_id)
         elif choice == '9':
+            delete_user_account(user_id)
+        elif choice == '10':
             break 
         else:
          print("Invalid choice. Try again.")
