@@ -124,6 +124,25 @@ def view_profile_info(user_id):
     print(f"- Email: {user.email}")
     print(f"- Account Created At: {user.created_at.strftime('%d-%m-%Y %H:%M:%S')}")
 
+def update_user_email(user_id):
+    print("\n--- Update User Email ---")
+    user = session.query(User).filter_by(id=user_id).first()
+
+    if user:
+        print(f"Current Email: {user.email}")
+        new_email = input("Enter the new email address: ").strip()
+
+        if new_email == "":
+            print("Email cannot be empty.")
+            return
+
+        user.email = new_email
+        session.commit()
+        print("✅ Email updated successfully.")
+    else:
+        print("User not found.")
+
+
 def menu(user_id):
     while True:
         print("""
@@ -134,7 +153,10 @@ def menu(user_id):
 4. Delete a trip
 5. Show travel stats
 6. View profile info
-7. Exit
+7. Update profile info
+8. Exit                         
+            
+
 """)
         choice = input("Enter your choice: ").strip()
 
@@ -151,7 +173,9 @@ def menu(user_id):
         elif choice == '6':
             view_profile_info(user_id)
         elif choice == '7':
-         break  
+            update_user_email(user_id)
+        elif choice == '8':
+            break 
         else:
          print("Invalid choice. Try again.")
 
