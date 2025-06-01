@@ -190,23 +190,6 @@ def view_profile_info(user_id):
     print(f"- Email: {user.email}")
     print(f"- Account Created At: {user.created_at.strftime('%d-%m-%Y %H:%M:%S')}")
 
-def update_user_email(user_id):
-    print("\n--- Update User Email ---")
-    user = session.query(User).filter_by(id=user_id).first()
-
-    if user:
-        print(f"Current Email: {user.email}")
-        new_email = input("Enter the new email address: ").strip()
-
-        if new_email == "":
-            print("Email cannot be empty.")
-            return
-
-        user.email = new_email
-        session.commit()
-        print("Email updated successfully.")
-    else:
-        print("User not found.")
 
 def delete_user_account(user_id):
     user = session.query(User).filter_by(id=user_id).first()
@@ -243,9 +226,8 @@ def menu(user_id):
 5. Delete a trip
 6. Show travel stats
 7. View profile info
-8. Update profile inf0
-9. Delete account
-10. Exit                         
+8. Delete account
+9. Exit                         
             
 
 """)
@@ -266,10 +248,8 @@ def menu(user_id):
         elif choice == '7':
             view_profile_info(user_id)
         elif choice == '8':
-            update_user_email(user_id)
-        elif choice == '9':
             delete_user_account(user_id)
-        elif choice == '10':
+        elif choice == '9':
             break 
         else:
          print("Invalid choice. Try again.")
