@@ -190,7 +190,6 @@ def view_profile_info(user_id):
     print(f"- Email: {user.email}")
     print(f"- Account Created At: {user.created_at.strftime('%d-%m-%Y %H:%M:%S')}")
 
-
 def delete_user_account(user_id):
     user = session.query(User).filter_by(id=user_id).first()
 
@@ -200,18 +199,33 @@ def delete_user_account(user_id):
 
     confirm = input("Are you sure you want to delete your account? This will remove all your trips too. (yes/no): ").strip().lower()
     if confirm == "yes":
-        
-        session.query(Trip).filter_by(user_id=user_id).delete()
+        user_trips = session.query(Trip).filter_by(user_id=user_id).all()
+        destination_ids = [trip.destination_id for trip in user_trips]
+
+        for trip in user_trips:
+            session.delete(trip)
+
         session.delete(user)
+
         try:
             session.commit()
-            print("Your account and all trips have been deleted. Goodbye!")
-            exit()  
+
+            for dest_id in destination_ids:
+                still_used = session.query(Trip).filter_by(destination_id=dest_id).first()
+                if not still_used:
+                    orphan = session.get(Destination, dest_id)
+                    if orphan:
+                        session.delete(orphan)
+            session.commit()
+
+            print("Your account, trips, and unused destinations have been deleted. Goodbye!")
+            exit()
         except Exception as e:
             session.rollback()
             print(f"Error deleting account: {e}")
     else:
         print("Account deletion cancelled.")
+
 
 
 
